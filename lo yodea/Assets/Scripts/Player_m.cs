@@ -36,7 +36,6 @@ public class Player_M : MonoBehaviour
     {
         checkIfScared();
         addForce();
-
     }
 
     void Update()
@@ -98,7 +97,6 @@ public class Player_M : MonoBehaviour
             {
                 rb.AddForce(jumpForce * Vector2.up, ForceMode2D.Impulse);
             }
-
         }
         else
         {
@@ -106,10 +104,7 @@ public class Player_M : MonoBehaviour
             if (Input.GetKey(KeyCode.S))
             {
                 rb.AddForce(-Vector2.up * gravityMultiplyer / 1.3f, ForceMode2D.Force);
-
             }
-
-
         }
         if (horizontal == 0 && rb.linearVelocityX != 0)
         {
@@ -122,8 +117,6 @@ public class Player_M : MonoBehaviour
         {
             rb.AddForce(new Vector2(horizontal * speed * Time.deltaTime * 100, 0), ForceMode2D.Force);
         }
-
-
     }
 
     private void checkIfScared()
@@ -141,17 +134,16 @@ public class Player_M : MonoBehaviour
         else
         {
             scared += Time.deltaTime * scaredMultiplyer * (1 + (int)groundDistance / 10);
-
         }
 
         if (scared >= 100)
         {
-            die();
+            Die();
         }
     }
-    private void die()
+    public void Die()
     {
         dead = true;
-        deathScreen.SetActive(true);
+        GameCanvas.instance.EnableDeathScreen();
     }
 }
