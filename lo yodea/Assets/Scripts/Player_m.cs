@@ -120,7 +120,6 @@ public class Player_M : MonoBehaviour
         {
             rb.AddForce(new Vector2(horizontal * speed, 0), ForceMode2D.Force);
             rb.linearVelocityX = Mathf.Clamp(rb.linearVelocityX, -maxSpeed, maxSpeed);
-            print(rb.linearVelocity);
         }
     }
 
@@ -133,7 +132,7 @@ public class Player_M : MonoBehaviour
         {
             if (scared > 0)
             {
-                scared -= Time.deltaTime * scaredMultiplyer;
+                scared -= Time.deltaTime * scaredMultiplyer * 1.5f;
             }
         }
         else
