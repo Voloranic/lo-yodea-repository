@@ -7,6 +7,7 @@ public class Player_M : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] Transform groundPoint;
     [SerializeField] float jumpForce;
+    [SerializeField] float maxSpeed;
     Rigidbody2D rb;
     private float scared;
     private float horizontal;
@@ -110,12 +111,14 @@ public class Player_M : MonoBehaviour
         {
             rb.AddForce(new Vector2(-rb.linearVelocityX * stopForce, 0), ForceMode2D.Force);
         }
+
+    
     }
     private void addForce()
     {
         if (!dead)
         {
-            rb.AddForce(new Vector2(horizontal * speed * Time.deltaTime * 100, 0), ForceMode2D.Force);
+            rb.AddForce(new Vector2(horizontal * speed, 0), ForceMode2D.Force);
         }
     }
 
