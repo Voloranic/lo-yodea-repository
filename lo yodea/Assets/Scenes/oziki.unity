@@ -729,7 +729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdc400f8306ec144d9e4fc7d4e9c2f89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scaredMultiplyer: 1
+  scaredMultiplyer: 3
   speed: 20
   groundPoint: {fileID: 426892833}
   jumpForce: 30
