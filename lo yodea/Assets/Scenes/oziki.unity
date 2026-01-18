@@ -730,7 +730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scaredMultiplyer: 3
-  speed: 20
+  speed: 25
   groundPoint: {fileID: 426892833}
   jumpForce: 30
   maxSpeed: 8
@@ -740,8 +740,8 @@ MonoBehaviour:
   floorLayer:
     serializedVersion: 2
     m_Bits: 128
-  gravityMultiplyer: 10
-  stopForce: 2
+  gravityMultiplyer: 20
+  stopForce: 5
   deathScreen: {fileID: 0}
   dashForce: 3
 --- !u!212 &815158211

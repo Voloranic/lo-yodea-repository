@@ -111,6 +111,7 @@ public class Player_M : MonoBehaviour
         {
             rb.AddForce(new Vector2(-rb.linearVelocityX * stopForce, 0), ForceMode2D.Force);
         }
+        
 
     
     }
@@ -118,8 +119,16 @@ public class Player_M : MonoBehaviour
     {
         if (!dead)
         {
-            rb.AddForce(new Vector2(horizontal * speed, 0), ForceMode2D.Force);
-            rb.linearVelocityX = Mathf.Clamp(rb.linearVelocityX, -maxSpeed, maxSpeed);
+            //when changing turns, if moving other way get extra force
+            if (rb.linearVelocityX < 0 && horizontal > 0 || rb.linearVelocityX > 0 && horizontal < 0)
+            {
+                rb.AddForce(new Vector2(horizontal * speed * 2, 0), ForceMode2D.Force);
+            }
+            else
+            {
+                rb.AddForce(new Vector2(horizontal * speed, 0), ForceMode2D.Force);
+                rb.linearVelocityX = Mathf.Clamp(rb.linearVelocityX, -maxSpeed, maxSpeed);
+            }
         }
     }
 
