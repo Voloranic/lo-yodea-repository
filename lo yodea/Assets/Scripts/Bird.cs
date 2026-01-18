@@ -13,13 +13,14 @@ public class Bird : MonoBehaviour
     LayerMask groundLayer;
     [SerializeField] float flySpeed;
     Vector2 direction;
-    char kDive; // hunt(h), fly(f), dive(d)
+    char kDive = 'h'; // hunt(h), fly(f), dive(d)
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        groundLayer = LayerMask.GetMask("ground") | LayerMask.GetMask("ground");
+        groundLayer = LayerMask.GetMask("ground") | LayerMask.GetMask("floor");
+        print(groundLayer.value);
 
     }
 
@@ -32,7 +33,7 @@ public class Bird : MonoBehaviour
     {
        if(kDive == 'h')
         {
-            if (transform.rotation.z != 0) transform.Rotate(0, 0, 0);
+            if (transform.rotation.z != 0) transform.rotation = Quaternion.Euler(0, 0, 0);
 
             float angle = -60f;
             float radians = angle * Mathf.Deg2Rad;
@@ -40,33 +41,48 @@ public class Bird : MonoBehaviour
             direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
             //check if player in pos
             huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer);
-            Debug.DrawRay(transform.position, direction * huntRay.distance, Color.red);
+            Debug.DrawRay(transform.position, direction * 100, Color.cyan);
             if (huntRay.collider != null)//ray hit player
             {
                 kDive = 'd';
+                print("dive!");
             }
+            //follow player -4.5<->-6
+            if(transform.position.x + 4.7 < target.position.x)
+            {
+
+            }
+            else if(transform.position.x + 5.8 > target.position.x)
+            {
+
+            }
+
            
         }
         else if (kDive == 'd')
         {
             dive();
+            FreezeForce();
         }
         else if (kDive == 'f')
         {
             Fly();
+            FreezeForce();
         }
     }
     private void dive()
     {
-        if (transform.rotation.z != 30) transform.Rotate(0, 0, 30);
+        if (transform.rotation.z != 30) transform.rotation = Quaternion.Euler(0, 0, -30);
+
         // rotate towards player
         //fly towards the player, stop only when reaching target/ground
-        rb.AddForce(transform.forward * flySpeed, ForceMode2D.Force);
+        rb.AddForce(direction * flySpeed, ForceMode2D.Force);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.callbackLayers == targetLayer || collision.callbackLayers == groundLayer)
+        if(collision.IsTouchingLayers(targetLayer) || collision.IsTouchingLayers(groundLayer))
         {
+            print("fly!");
             kDive = 'f';
         }
     }
@@ -74,19 +90,26 @@ public class Bird : MonoBehaviour
     private void Fly()
     {
         //draw ray, rotate and fly until reach desired height
-        if (transform.rotation.z != 90) transform.Rotate(0, 0, 90);
+        if (transform.rotation.z != 90) transform.rotation = Quaternion.Euler(0, 0, 90);
 
-        huntRay = Physics2D.Raycast(transform.position,-Vector2.up, height, targetLayer);
+        huntRay = Physics2D.Raycast(transform.position,-Vector2.up, height, groundLayer);
         if (huntRay.collider != null)
         {
-            rb.AddForce(Vector2.up* flySpeed / 1.5f, ForceMode2D.Force);
+            rb.AddForce(Vector2.up* flySpeed / 2, ForceMode2D.Force);
 
         }
         else
         {
+            print("hunt!");
+            FreezeForce();
+
             kDive = 'h';
         }
        
 
+    }
+    private void FreezeForce()
+    {
+        rb.linearVelocity = new Vector2(0, 0);
     }
 }

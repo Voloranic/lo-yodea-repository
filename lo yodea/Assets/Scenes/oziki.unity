@@ -537,7 +537,7 @@ MonoBehaviour:
     m_Bits: 8
   target: {fileID: 815158212}
   height: 10
-  flySpeed: 5
+  flySpeed: 200
 --- !u!58 &664650324
 CircleCollider2D:
   m_ObjectHideFlags: 0
