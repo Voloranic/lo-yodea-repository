@@ -17,7 +17,7 @@ public class Bird : MonoBehaviour
     char kDive = 'h'; // hunt(h), fly(f), dive(d)
     int face;
     float scale;
-    int angle;
+    float angle;
     float radians;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,35 +34,38 @@ public class Bird : MonoBehaviour
     {
         Hunt();
     }
+    private void FixedUpdate()
+    {
+        if (kDive == 'd')
+        {
+            dive();
+            rb.AddForce(direction * flySpeed*100, ForceMode2D.Force);
+            FreezeForce();
+            print("d");
+        }
+        else if (kDive == 'f')
+        {
+            Fly();
+            FreezeForce();
+            print("f");
+
+        }
+        else if (kDive == 'h')
+        {
+            rb.AddForce(flySpeed * face * transform.right, ForceMode2D.Force);
+            print("h");
+
+        }
+    }
     private void Hunt()
     {
         if (kDive == 'h')
         {
             if (transform.rotation.z != 0) transform.rotation = Quaternion.Euler(0, 0, 0);
 
-            angle = -60;
-            radians = angle * Mathf.Deg2Rad;
-
-            direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
             //check if player in pos
-            if (face == 1)
-            {
-                float angle = -60f;
-                float radians = angle * Mathf.Deg2Rad;
-
-                direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
-
-
-            }
-            else
-            {
-                float angle = -120f;
-                float radians = angle * Mathf.Deg2Rad;
-
-                direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
-            }
-            huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer);
-            Debug.DrawRay(transform.position, direction * 100, Color.cyan);
+           
+            
 
             if (huntRay.collider != null)//ray hit player
             {
@@ -74,29 +77,28 @@ public class Bird : MonoBehaviour
             if (transform.position.x + 4.7 < target.position.x && face != 1)
             {
                 face = 1;
+                angle = -60f;
+                radians = angle * Mathf.Deg2Rad;
+
+                
                 //  if (scale < 0) scale *= -1;
             }
             else if (transform.position.x - 4.7 > target.position.x && face != -1)
             {
                 face = -1;
+                angle = -120f;
+                radians = angle * Mathf.Deg2Rad;
                 // if (scale > 0) scale *= -1;
 
             }
+            direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+            huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer);
+            Debug.DrawRay(transform.position, direction * 100, Color.cyan);
             // transform.localScale = new Vector3(scale,transform.localScale.y,1);
-            rb.AddForce(flySpeed * face * transform.right, ForceMode2D.Force);
 
 
         }
-        else if (kDive == 'd')
-        {
-            dive();
-            FreezeForce();
-        }
-        else if (kDive == 'f')
-        {
-            Fly();
-            FreezeForce();
-        }
+        
     }
     private void dive()
     {
@@ -104,7 +106,6 @@ public class Bird : MonoBehaviour
 
         // rotate towards player
         //fly towards the player, stop only when reaching target/ground
-        rb.AddForce(direction * flySpeed * 100, ForceMode2D.Force);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -112,6 +113,7 @@ public class Bird : MonoBehaviour
         {
             print("fly!");
             kDive = 'f';
+            //Invoke("SetDive", 2);
         }
     }
 
@@ -133,6 +135,7 @@ public class Bird : MonoBehaviour
 
             kDive = 'h';
         }
+
 
 
     }

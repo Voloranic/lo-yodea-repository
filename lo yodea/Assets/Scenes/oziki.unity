@@ -670,7 +670,7 @@ Transform:
   m_GameObject: {fileID: 664650322}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.35, y: 5.1452, z: 0}
+  m_LocalPosition: {x: -4.9, y: 5.1452, z: 0}
   m_LocalScale: {x: 2.4116, y: 1.2504, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -908,7 +908,7 @@ MonoBehaviour:
   scaredMultiplyer: 3
   speed: 25
   groundPoint: {fileID: 426892833}
-  jumpForce: 30
+  jumpForce: 15
   maxSpeed: 8
   groundLayer:
     serializedVersion: 2
@@ -1373,7 +1373,7 @@ Transform:
   m_GameObject: {fileID: 1825400981}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.26, y: -0.97, z: 0}
+  m_LocalPosition: {x: -22.19, y: -0.97, z: 0}
   m_LocalScale: {x: 8.3283, y: 1.1297, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

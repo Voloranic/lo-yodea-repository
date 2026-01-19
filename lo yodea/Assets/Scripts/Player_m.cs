@@ -50,6 +50,10 @@ public class Player_M : MonoBehaviour
         checkGround();
 
     }
+    private void Jump()
+    {
+
+    }
     private void attacks()
     {
         //dash
