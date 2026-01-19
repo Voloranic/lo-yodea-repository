@@ -71,12 +71,12 @@ public class Bird : MonoBehaviour
             }
             //follow player -4.5<->-6
             // scale = transform.localScale.x;
-            if (transform.position.x + 4.7 < target.position.x)
+            if (transform.position.x + 4.7 < target.position.x && face != 1)
             {
                 face = 1;
                 //  if (scale < 0) scale *= -1;
             }
-            else if (transform.position.x + 5.8 > target.position.x)
+            else if (transform.position.x - 4.7 > target.position.x && face != -1)
             {
                 face = -1;
                 // if (scale > 0) scale *= -1;

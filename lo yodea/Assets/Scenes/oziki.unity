@@ -537,7 +537,7 @@ MonoBehaviour:
     m_Bits: 8
   target: {fileID: 815158212}
   height: 10
-  flySpeed: 4
+  flySpeed: 10
   maxSpeed: 10
 --- !u!58 &664650324
 CircleCollider2D:
@@ -670,7 +670,7 @@ Transform:
   m_GameObject: {fileID: 664650322}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.0158, y: 5.1452, z: 0}
+  m_LocalPosition: {x: 11.35, y: 5.1452, z: 0}
   m_LocalScale: {x: 2.4116, y: 1.2504, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
