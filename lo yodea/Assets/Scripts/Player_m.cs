@@ -127,8 +127,9 @@ public class Player_M : MonoBehaviour
             else
             {
                 rb.AddForce(new Vector2(horizontal * speed, 0), ForceMode2D.Force);
-                rb.linearVelocityX = Mathf.Clamp(rb.linearVelocityX, -maxSpeed, maxSpeed);
+         
             }
+            rb.linearVelocityX = Mathf.Clamp(rb.linearVelocityX, -maxSpeed, maxSpeed);
         }
     }
 

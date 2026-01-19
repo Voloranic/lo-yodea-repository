@@ -7,13 +7,16 @@ public class Bird : MonoBehaviour
     private Rigidbody2D rb;
     RaycastHit2D huntRay;
     [SerializeField] LayerMask targetLayer;
-    [SerializeField]Transform target;
+    [SerializeField] Transform target;
     private int groundDistance;
     [SerializeField] private int height;
     LayerMask groundLayer;
     [SerializeField] float flySpeed;
+    [SerializeField] float maxSpeed;
     Vector2 direction;
     char kDive = 'h'; // hunt(h), fly(f), dive(d)
+    int face;
+    float scale;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -31,7 +34,7 @@ public class Bird : MonoBehaviour
     }
     private void Hunt()
     {
-       if(kDive == 'h')
+        if (kDive == 'h')
         {
             if (transform.rotation.z != 0) transform.rotation = Quaternion.Euler(0, 0, 0);
 
@@ -40,24 +43,41 @@ public class Bird : MonoBehaviour
 
             direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
             //check if player in pos
-            huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer);
-            Debug.DrawRay(transform.position, direction * 100, Color.cyan);
+            if (face == 1)
+            {
+                huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer);
+                Debug.DrawRay(transform.position, direction * 100, Color.cyan);
+
+            }
+            else
+            {
+                huntRay = Physics2D.Raycast(transform.position, new Vector2(direction.x - 70, direction.y), 100, targetLayer);
+                Debug.DrawRay(transform.position, new Vector2(direction.x - 70, direction.y) * 100, Color.cyan);
+
+            }
+
             if (huntRay.collider != null)//ray hit player
             {
                 kDive = 'd';
                 print("dive!");
             }
             //follow player -4.5<->-6
-            if(transform.position.x + 4.7 < target.position.x)
+           // scale = transform.localScale.x;
+            if (transform.position.x + 4.7 < target.position.x)
             {
+                face = 1;
+                //  if (scale < 0) scale *= -1;
+            }
+            else if (transform.position.x + 5.8 > target.position.x)
+            {
+                face = -1;
+               // if (scale > 0) scale *= -1;
 
             }
-            else if(transform.position.x + 5.8 > target.position.x)
-            {
+           // transform.localScale = new Vector3(scale,transform.localScale.y,1);
+            rb.AddForce(flySpeed * face * transform.right, ForceMode2D.Force);
 
-            }
 
-           
         }
         else if (kDive == 'd')
         {
@@ -76,11 +96,11 @@ public class Bird : MonoBehaviour
 
         // rotate towards player
         //fly towards the player, stop only when reaching target/ground
-        rb.AddForce(direction * flySpeed, ForceMode2D.Force);
+        rb.AddForce(direction * flySpeed * 100, ForceMode2D.Force);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.IsTouchingLayers(targetLayer) || collision.IsTouchingLayers(groundLayer))
+        if (collision.IsTouchingLayers(targetLayer) || collision.IsTouchingLayers(groundLayer))
         {
             print("fly!");
             kDive = 'f';
@@ -92,10 +112,10 @@ public class Bird : MonoBehaviour
         //draw ray, rotate and fly until reach desired height
         if (transform.rotation.z != 90) transform.rotation = Quaternion.Euler(0, 0, 90);
 
-        huntRay = Physics2D.Raycast(transform.position,-Vector2.up, height, groundLayer);
+        huntRay = Physics2D.Raycast(transform.position, -Vector2.up, height, groundLayer);
         if (huntRay.collider != null)
         {
-            rb.AddForce(Vector2.up* flySpeed / 2, ForceMode2D.Force);
+            rb.AddForce(Vector2.up * flySpeed * 100 / 2, ForceMode2D.Force);
 
         }
         else
@@ -105,11 +125,12 @@ public class Bird : MonoBehaviour
 
             kDive = 'h';
         }
-       
+
 
     }
     private void FreezeForce()
     {
         rb.linearVelocity = new Vector2(0, 0);
     }
+  
 }
