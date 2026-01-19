@@ -17,6 +17,8 @@ public class Bird : MonoBehaviour
     char kDive = 'h'; // hunt(h), fly(f), dive(d)
     int face;
     float scale;
+    int angle;
+    float radians;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -38,23 +40,29 @@ public class Bird : MonoBehaviour
         {
             if (transform.rotation.z != 0) transform.rotation = Quaternion.Euler(0, 0, 0);
 
-            float angle = -60f;
-            float radians = angle * Mathf.Deg2Rad;
+            angle = -60;
+            radians = angle * Mathf.Deg2Rad;
 
             direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
             //check if player in pos
             if (face == 1)
             {
-                huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer);
-                Debug.DrawRay(transform.position, direction * 100, Color.cyan);
+                float angle = -60f;
+                float radians = angle * Mathf.Deg2Rad;
+
+                direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+
 
             }
             else
             {
-                huntRay = Physics2D.Raycast(transform.position, new Vector2(direction.x - 70, direction.y), 100, targetLayer);
-                Debug.DrawRay(transform.position, new Vector2(direction.x - 70, direction.y) * 100, Color.cyan);
+                float angle = -120f;
+                float radians = angle * Mathf.Deg2Rad;
 
+                direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
             }
+            huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer);
+            Debug.DrawRay(transform.position, direction * 100, Color.cyan);
 
             if (huntRay.collider != null)//ray hit player
             {
@@ -62,7 +70,7 @@ public class Bird : MonoBehaviour
                 print("dive!");
             }
             //follow player -4.5<->-6
-           // scale = transform.localScale.x;
+            // scale = transform.localScale.x;
             if (transform.position.x + 4.7 < target.position.x)
             {
                 face = 1;
@@ -71,10 +79,10 @@ public class Bird : MonoBehaviour
             else if (transform.position.x + 5.8 > target.position.x)
             {
                 face = -1;
-               // if (scale > 0) scale *= -1;
+                // if (scale > 0) scale *= -1;
 
             }
-           // transform.localScale = new Vector3(scale,transform.localScale.y,1);
+            // transform.localScale = new Vector3(scale,transform.localScale.y,1);
             rb.AddForce(flySpeed * face * transform.right, ForceMode2D.Force);
 
 
@@ -132,5 +140,5 @@ public class Bird : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(0, 0);
     }
-  
+
 }
