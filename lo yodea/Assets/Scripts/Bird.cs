@@ -36,15 +36,30 @@ public class Bird : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (kDive == 'd')
+
+        forces();
+    }
+    private void forces()
+    {
+        if (transform.position.y < target.transform.position.y)
+        {
+            huntRay = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 1), Vector2.up, height, groundLayer);
+            if (huntRay.collider != null)
+            {
+                kDive = 'f';
+            }
+
+        }
+        if (kDive == 'd' && transform.position.y - 1 > target.transform.position.y)
         {
             dive();
-            rb.AddForce(direction * flySpeed*100, ForceMode2D.Force);
+            rb.AddForce(direction * flySpeed * 100, ForceMode2D.Force);
             FreezeForce();
             print("d");
         }
         else if (kDive == 'f')
         {
+            kDive = 'f';
             Fly();
             FreezeForce();
             print("f");
@@ -64,8 +79,9 @@ public class Bird : MonoBehaviour
             if (transform.rotation.z != 0) transform.rotation = Quaternion.Euler(0, 0, 0);
 
             //check if player in pos
-           
-            
+            direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+            huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer);
+            Debug.DrawRay(transform.position, direction * 100, Color.cyan);
 
             if (huntRay.collider != null)//ray hit player
             {
@@ -91,9 +107,7 @@ public class Bird : MonoBehaviour
                 // if (scale > 0) scale *= -1;
 
             }
-            direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
-            huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer);
-            Debug.DrawRay(transform.position, direction * 100, Color.cyan);
+            
             // transform.localScale = new Vector3(scale,transform.localScale.y,1);
 
 
