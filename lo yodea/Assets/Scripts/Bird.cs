@@ -46,7 +46,7 @@ public class Bird : MonoBehaviour
             huntRay = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 1), Vector2.up, height, groundLayer);
             if (huntRay.collider != null)
             {
-                kDive = 'f';
+                HitGround();
             }
 
         }
@@ -59,7 +59,6 @@ public class Bird : MonoBehaviour
         }
         else if (kDive == 'f')
         {
-            kDive = 'f';
             Fly();
             FreezeForce();
             print("f");
@@ -125,10 +124,13 @@ public class Bird : MonoBehaviour
     {
         if (collision.IsTouchingLayers(targetLayer) || collision.IsTouchingLayers(groundLayer))
         {
-            print("fly!");
-            kDive = 'f';
-            //Invoke("SetDive", 2);
+            HitGround();
         }
+    }
+    private void HitGround()
+    {
+        print("fly!");
+        kDive = 'f';
     }
 
     private void Fly()
