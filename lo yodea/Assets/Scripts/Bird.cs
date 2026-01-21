@@ -1,3 +1,4 @@
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.XR;
@@ -13,6 +14,8 @@ public class Bird : MonoBehaviour
     LayerMask groundLayer;
     [SerializeField] float flySpeed;
     [SerializeField] float maxSpeed;
+    private LineRenderer lineRenderer;
+
     Vector2 direction;
     char kDive = 'h'; // hunt(h), fly(f), dive(d)
     int face;
@@ -26,6 +29,10 @@ public class Bird : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         groundLayer = LayerMask.GetMask("ground") | LayerMask.GetMask("floor");
         print(groundLayer.value);
+        //line renderer
+        lineRenderer.positionCount = 2;
+        lineRenderer.startWidth = 0.02f;
+        lineRenderer.endWidth = 0.01f;
 
     }
 
@@ -80,7 +87,7 @@ public class Bird : MonoBehaviour
             //check if player in pos
             direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
             huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer);
-            Debug.DrawRay(transform.position, direction * 100, Color.cyan);
+            Debug.DrawRay(transform.position, direction * 100, UnityEngine.Color.aliceBlue);
 
             if (huntRay.collider != null)//ray hit player
             {
@@ -106,8 +113,9 @@ public class Bird : MonoBehaviour
                 // if (scale > 0) scale *= -1;
 
             }
-            
-            // transform.localScale = new Vector3(scale,transform.localScale.y,1);
+
+            lineRenderer.SetPosition(0, transform.position);
+            lineRenderer.SetPosition(1, huntRay.point);
 
 
         }
