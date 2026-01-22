@@ -110,7 +110,7 @@ MonoBehaviour:
   scaredMultiplyer: 3
   speed: 25
   groundPoint: {fileID: 6636521028886633367}
-  jumpForce: 15
+  jumpForce: 27
   maxSpeed: 8
   groundLayer:
     serializedVersion: 2

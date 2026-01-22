@@ -7,6 +7,8 @@ public class Bird : MonoBehaviour
 {
     private Rigidbody2D rb;
     RaycastHit2D huntRay;
+    RaycastHit2D drawRay;
+
     [SerializeField] LayerMask targetLayer;
     [SerializeField] Transform target;
     private int groundDistance;
@@ -15,6 +17,7 @@ public class Bird : MonoBehaviour
     [SerializeField] float flySpeed;
     [SerializeField] float maxSpeed;
     private LineRenderer lineRenderer;
+    [SerializeField] int speedMultiplyer;
 
     Vector2 direction;
     char kDive = 'h'; // hunt(h), fly(f), dive(d)
@@ -49,26 +52,28 @@ public class Bird : MonoBehaviour
     }
     private void forces()
     {
-        if (transform.position.y < target.transform.position.y)
+       /*if (transform.position.y < target.transform.position.y)
         {
             huntRay = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 1), Vector2.up, height, groundLayer);
             if (huntRay.collider != null)
             {
-                HitGround();
+               HitGround();
             }
 
         }
+       */
+
+        
         if (kDive == 'd' && transform.position.y - 1 > target.transform.position.y)
         {
             dive();
-            rb.AddForce(direction * flySpeed * 100, ForceMode2D.Force);
-            FreezeForce();
+            rb.AddForce(direction * flySpeed * speedMultiplyer, ForceMode2D.Force);
             print("d");
         }
         else if (kDive == 'f')
         {
+            rb.AddForce(flySpeed * speedMultiplyer * Vector2.up, ForceMode2D.Force);
             Fly();
-            FreezeForce();
             print("f");
 
         }
@@ -87,12 +92,17 @@ public class Bird : MonoBehaviour
 
             //check if player in pos
             direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
-            huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer | groundLayer);
+            huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer);
+            drawRay = Physics2D.Raycast(transform.position, direction, 100);
+
             Debug.DrawRay(transform.position, direction * 100, UnityEngine.Color.aliceBlue);
 
-            if (huntRay.collider.callbackLayers == targetLayer)//ray hit player
+            if (huntRay.collider != null)//ray hit player
             {
+
                 kDive = 'd';
+                FreezeForce();
+                rb.constraints = RigidbodyConstraints2D.None;
                 print("dive!");
             }
             //follow player -4.5<->-6
@@ -116,7 +126,7 @@ public class Bird : MonoBehaviour
             }
 
             lineRenderer.SetPosition(0, transform.position);
-            lineRenderer.SetPosition(1, -huntRay.point);
+            lineRenderer.SetPosition(1, drawRay.point);
 
 
         }
@@ -124,14 +134,17 @@ public class Bird : MonoBehaviour
     }
     private void dive()
     {
-        if (transform.rotation.z != 30) transform.rotation = Quaternion.Euler(0, 0, -30);
+        if (transform.rotation.z != -30 && face == 1) transform.rotation = Quaternion.Euler(0, 0, -30);
+        else if(transform.rotation.z !=30 && face == -1) Quaternion.Euler(0, 0, 30);
 
         // rotate towards player
         //fly towards the player, stop only when reaching target/ground
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.IsTouchingLayers(targetLayer) || collision.IsTouchingLayers(groundLayer))
+        // Compare the layer of the thing we hit to our masks
+        if (((1 << collision.gameObject.layer) & groundLayer) != 0 ||
+            ((1 << collision.gameObject.layer) & targetLayer) != 0)
         {
             HitGround();
         }
@@ -140,6 +153,7 @@ public class Bird : MonoBehaviour
     {
         print("fly!");
         kDive = 'f';
+        FreezeForce();
     }
 
     private void Fly()
@@ -150,15 +164,14 @@ public class Bird : MonoBehaviour
         huntRay = Physics2D.Raycast(transform.position, -Vector2.up, height, groundLayer);
         if (huntRay.collider != null)
         {
-            rb.AddForce(Vector2.up * flySpeed * 100 / 2, ForceMode2D.Force);
 
         }
         else
         {
             print("hunt!");
-            FreezeForce();
-
             kDive = 'h';
+            FreezeForce();
+            rb.constraints = RigidbodyConstraints2D.FreezePositionY;
         }
 
 
