@@ -30,7 +30,6 @@ public class Bird : MonoBehaviour
         groundLayer = LayerMask.GetMask("ground") | LayerMask.GetMask("floor");
         print(groundLayer.value);
         //line renderer
-        lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
         lineRenderer.startWidth = 0.02f;
         lineRenderer.endWidth = 0.01f;
@@ -87,10 +86,10 @@ public class Bird : MonoBehaviour
 
             //check if player in pos
             direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
-            huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer | groundLayer);
+            huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer);
             Debug.DrawRay(transform.position, direction * 100, UnityEngine.Color.aliceBlue);
 
-            if (huntRay.collider.callbackLayers == targetLayer)//ray hit player
+            if (huntRay.collider != null)//ray hit player
             {
                 kDive = 'd';
                 print("dive!");
@@ -116,7 +115,7 @@ public class Bird : MonoBehaviour
             }
 
             lineRenderer.SetPosition(0, transform.position);
-            lineRenderer.SetPosition(1, -huntRay.point);
+            lineRenderer.SetPosition(1, huntRay.point);
 
 
         }
