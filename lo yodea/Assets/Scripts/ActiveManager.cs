@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class ActiveManager : MonoBehaviour
 {
-    [Header("Object !In activation order!")] 
-    [SerializeField] GameObject[] objects;
-    [Header("int !same pos as object! from small to big!")]
-    [SerializeField] float[] Xactivation;
     [SerializeField] Transform player;
-    [SerializeField] int range;
-    float x;
 
+    [Header("objects")]
+    [SerializeField] GameObject[] objects;
+    [SerializeField] float[] Xactivation;
+    [SerializeField] int range;
+
+    [Header("Animals")]
+    [SerializeField] GameObject[] animals;
+    [SerializeField] float[] AXactivation;
+    [SerializeField] int Arange;
+
+    float x;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
@@ -23,41 +28,44 @@ public class ActiveManager : MonoBehaviour
     {
         while (true)
         {
-            x = transform.position.x;
-            check();
+            x = player.position.x;
+            check(Xactivation, objects);
+            check(AXactivation, animals);
+
             // Wait for 0.1 seconds (10 times per second)
             yield return new WaitForSeconds(0.1f);
         }
     }
 
     // Update is called once per frame
-  /*  void FixedUpdate()
+    /*
+    void FixedUpdate()
     {
 
     }
-  */
-    private void check()
+    */
+
+    private void check(float[] pos, GameObject[] ob)
     {
         bool disableRight = false;
         bool disableLeft = false;
-        for(int i = 0; i < Xactivation.Length; i++)
+
+        for (int i = 0; i < ob.Length; i++)
         {
-            if (x > Xactivation[i] + range && !disableRight)
+            if (x > pos[i] + range && !disableRight)
             {
-                if(objects[i].activeSelf) objects[i].SetActive(false);
+                if (ob[i].activeSelf) ob[i].SetActive(false);
                 disableRight = true;
             }
-            else if (x < Xactivation[i] - range && !disableLeft)
+            else if (x < pos[i] - range && !disableLeft)
             {
-                if (objects[i].activeSelf) objects[i].SetActive(false);
+                if (ob[i].activeSelf) ob[i].SetActive(false);
                 disableLeft = true;
             }
             else
             {
-                if (!objects[i].activeSelf) objects[i].SetActive(true);
+                if (!ob[i].activeSelf) ob[i].SetActive(true);
             }
-
         }
     }
-   
 }

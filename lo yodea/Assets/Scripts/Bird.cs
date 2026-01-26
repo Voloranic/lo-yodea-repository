@@ -19,7 +19,9 @@ public class Bird : MonoBehaviour
     private LineRenderer lineRenderer;
     [SerializeField] int speedMultiplyer;
     [SerializeField] GameObject explosion;
+    [Header("follow")]
     [SerializeField] Vector2 limits; // x is min, y is max
+
 
     Vector2 direction;
     char kDive = 'h'; // hunt(h), fly(f), dive(d)
