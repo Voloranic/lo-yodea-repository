@@ -19,6 +19,7 @@ public class Bird : MonoBehaviour
     private LineRenderer lineRenderer;
     [SerializeField] int speedMultiplyer;
     [SerializeField] GameObject explosion;
+    [SerializeField] Vector2 limits; // x is min, y is max
 
     Vector2 direction;
     char kDive = 'h'; // hunt(h), fly(f), dive(d)
@@ -44,12 +45,12 @@ public class Bird : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Hunt();
+        if(transform.position.x > limits.x && transform.position.x < limits.y) Hunt();
     }
     private void FixedUpdate()
     {
 
-        forces();
+        if (transform.position.x > limits.x && transform.position.x < limits.y) forces();
     }
     private void forces()
     {
@@ -144,13 +145,12 @@ public class Bird : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // Compare the layer of the thing we hit to our masks
-        if (((1 << collision.gameObject.layer) & groundLayer) != 0 ||
-            ((1 << collision.gameObject.layer) & targetLayer) != 0)
+        if (((1 << collision.gameObject.layer) & groundLayer) != 0 || ((1 << collision.gameObject.layer) & targetLayer) != 0)
         {
             HitGround();
-            
         }
     }
+      
     private void HitGround()
     {
         print("fly!");
