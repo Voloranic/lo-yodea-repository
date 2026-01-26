@@ -18,6 +18,7 @@ public class Bird : MonoBehaviour
     [SerializeField] float maxSpeed;
     private LineRenderer lineRenderer;
     [SerializeField] int speedMultiplyer;
+    [SerializeField] GameObject explosion;
 
     Vector2 direction;
     char kDive = 'h'; // hunt(h), fly(f), dive(d)
@@ -135,7 +136,7 @@ public class Bird : MonoBehaviour
     private void dive()
     {
         if (transform.rotation.z != -30 && face == 1) transform.rotation = Quaternion.Euler(0, 0, -30);
-        else if(transform.rotation.z !=30 && face == -1) Quaternion.Euler(0, 0, 30);
+        else if(transform.rotation.z !=30 && face == -1) transform.rotation = Quaternion.Euler(0, 0, 30);
 
         // rotate towards player
         //fly towards the player, stop only when reaching target/ground
@@ -147,6 +148,7 @@ public class Bird : MonoBehaviour
             ((1 << collision.gameObject.layer) & targetLayer) != 0)
         {
             HitGround();
+            
         }
     }
     private void HitGround()
@@ -154,6 +156,20 @@ public class Bird : MonoBehaviour
         print("fly!");
         kDive = 'f';
         FreezeForce();
+        //boom
+        explosion.SetActive(true);
+        explosion.transform.SetParent(null);
+        explosion.transform.position = transform.position;
+        explosion.transform.rotation = Quaternion.Euler(0, 0, 0);
+        Invoke(nameof(SetBoomOff), 0.5f);
+
+
+
+    }
+    private void SetBoomOff()
+    {
+        explosion.transform.parent = this.gameObject.transform;
+        explosion.SetActive(false);
     }
 
     private void Fly()
