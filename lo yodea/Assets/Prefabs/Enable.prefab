@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab33ec873d9d0a34dbc83b7eaf8b4d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActiveManager
-  objects: []
-  Xactivation: []
   player: {fileID: 0}
+  objects:
+  - {fileID: 0}
+  range: 120

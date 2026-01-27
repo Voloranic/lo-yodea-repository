@@ -1,6 +1,7 @@
 using System.Drawing;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
 using UnityEngine.XR;
 
@@ -32,6 +33,7 @@ public class Bird : MonoBehaviour
     float angle;
     float radians;
     bool freez;
+    bool fonce = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -51,36 +53,53 @@ public class Bird : MonoBehaviour
     void Update()
     {
         float distanceToTarget = Mathf.Abs(transform.position.x - target.position.x);
-        bool isInsideLimits = transform.position.x > limits.x && transform.position.x < limits.y;
+        bool isInsideLimits = transform.position.x > limits.x &&transform.position.x < limits.y;
 
-        if (distanceToTarget <= range && isInsideLimits)
+        if (!isInsideLimits)
+        {
+            freez = true;
+            rb.linearVelocityX = 0;
+
+            if (!fonce)
+            {
+                fonce = true;
+                Fly();
+            }
+
+            return; // exit early
+        }
+
+        // From here on, we ARE inside limits
+        fonce = false;
+
+        if (distanceToTarget <= range)
         {
             freez = false;
+            Hunt();
         }
         else
         {
             freez = true;
         }
-        if(freez) Hunt();
+
     }
     private void FixedUpdate()
     {
 
-        if (transform.position.x > limits.x && transform.position.x < limits.y && !freez) forces();
+        forces();
     }
     private void forces()
     {
-       /*if (transform.position.y < target.transform.position.y)
-        {
-            huntRay = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 1), Vector2.up, height, groundLayer);
-            if (huntRay.collider != null)
-            {
-               HitGround();
-            }
+        /*if (transform.position.y < target.transform.position.y)
+         {
+             huntRay = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 1), Vector2.up, height, groundLayer);
+             if (huntRay.collider != null)
+             {
+                HitGround();
+             }
 
-        }
-       */
-
+         }
+        */
         
         if (kDive == 'd' && transform.position.y - 1 > target.transform.position.y)
         {
@@ -98,7 +117,6 @@ public class Bird : MonoBehaviour
         else if (kDive == 'h')
         {
             rb.AddForce(flySpeed * face * transform.right, ForceMode2D.Force);
-            print("h");
 
         }
     }
@@ -106,6 +124,7 @@ public class Bird : MonoBehaviour
     {
         if (kDive == 'h')
         {
+            print("hunt!");
             if (transform.rotation.z != 0) transform.rotation = Quaternion.Euler(0, 0, 0);
 
             //check if player in pos
@@ -196,19 +215,21 @@ public class Bird : MonoBehaviour
         huntRay = Physics2D.Raycast(transform.position, -Vector2.up, height, groundLayer);
         if (huntRay.collider != null)
         {
-
+            //forces(moves up)
         }
         else
         {
-            print("hunt!");
             kDive = 'h';
             FreezeForce();
             rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
         }
+       
 
 
 
     }
+    
     private void FreezeForce()
     {
         rb.linearVelocity = new Vector2(0, 0);
