@@ -32,14 +32,13 @@ public class Bird : MonoBehaviour
     float scale;
     float angle;
     float radians;
-    bool freez;
     bool fonce = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        groundLayer = LayerMask.GetMask("ground") | LayerMask.GetMask("floor");
+        groundLayer = LayerMask.GetMask("ground") | LayerMask.GetMask("floor"); 
         print(groundLayer.value);
         //line renderer
         lineRenderer = GetComponent<LineRenderer>();
@@ -52,14 +51,23 @@ public class Bird : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float distanceToTarget = Mathf.Abs(transform.position.x - target.position.x);
-        bool isInsideLimits = transform.position.x > limits.x &&transform.position.x < limits.y;
+        Vector2 pos = transform.position;
+        float distanceToTarget = Mathf.Abs(pos.x - target.position.x);
+        bool isInsideLimits = target.position.x > limits.x &&target.position.x < limits.y;
 
+        print(isInsideLimits);
         if (!isInsideLimits)
         {
-            freez = true;
-            rb.linearVelocityX = 0;
-
+            if(pos.x < limits.x)
+            {
+                face = 1;
+                Hunt(limits.x + 2,false);
+            }
+            else
+            {
+                face = -1;
+                Hunt(limits.y - 2,false);
+            }
             if (!fonce)
             {
                 fonce = true;
@@ -68,19 +76,16 @@ public class Bird : MonoBehaviour
 
             return; // exit early
         }
+       
 
-        // From here on, we ARE inside limits
-        fonce = false;
+            // From here on, we ARE inside limits
+            fonce = false;
 
         if (distanceToTarget <= range)
         {
-            freez = false;
-            Hunt();
+            Hunt(target.position.x,true);
         }
-        else
-        {
-            freez = true;
-        }
+
 
     }
     private void FixedUpdate()
@@ -120,21 +125,38 @@ public class Bird : MonoBehaviour
 
         }
     }
-    private void Hunt()
+    private void Hunt(float target,bool attack)
     {
         if (kDive == 'h')
         {
-            print("hunt!");
             if (transform.rotation.z != 0) transform.rotation = Quaternion.Euler(0, 0, 0);
 
             //check if player in pos
+            if (transform.position.x + 4.7 < target && face != 1)
+            {
+                face = 1;
+                angle = -60f;
+                radians = angle * Mathf.Deg2Rad;
+
+
+                //  if (scale < 0) scale *= -1;
+            }
+            else if (transform.position.x - 4.7 > target && face != -1)
+            {
+                face = -1;
+                angle = -120f;
+                radians = angle * Mathf.Deg2Rad;
+                // if (scale > 0) scale *= -1;
+
+            }
+
             direction = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
             huntRay = Physics2D.Raycast(transform.position, direction, 100, targetLayer);
             drawRay = Physics2D.Raycast(transform.position, direction, 100);
 
             Debug.DrawRay(transform.position, direction * 100, UnityEngine.Color.aliceBlue);
 
-            if (huntRay.collider != null)//ray hit player
+            if (huntRay.collider != null && attack)//ray hit player
             {
 
                 kDive = 'd';
@@ -144,26 +166,13 @@ public class Bird : MonoBehaviour
             }
             //follow player -4.5<->-6
             // scale = transform.localScale.x;
-            if (transform.position.x + 4.7 < target.position.x && face != 1)
+
+
+            if (attack)
             {
-                face = 1;
-                angle = -60f;
-                radians = angle * Mathf.Deg2Rad;
-
-                
-                //  if (scale < 0) scale *= -1;
+                lineRenderer.SetPosition(0, transform.position);
+                lineRenderer.SetPosition(1, drawRay.point);
             }
-            else if (transform.position.x - 4.7 > target.position.x && face != -1)
-            {
-                face = -1;
-                angle = -120f;
-                radians = angle * Mathf.Deg2Rad;
-                // if (scale > 0) scale *= -1;
-
-            }
-
-            lineRenderer.SetPosition(0, transform.position);
-            lineRenderer.SetPosition(1, drawRay.point);
 
 
         }
