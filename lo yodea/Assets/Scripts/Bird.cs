@@ -1,5 +1,6 @@
 using System.Drawing;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 using UnityEngine.XR;
 
@@ -21,6 +22,7 @@ public class Bird : MonoBehaviour
     [SerializeField] GameObject explosion;
     [Header("follow")]
     [SerializeField] Vector2 limits; // x is min, y is max
+    [SerializeField] float range;
 
 
     Vector2 direction;
@@ -29,6 +31,7 @@ public class Bird : MonoBehaviour
     float scale;
     float angle;
     float radians;
+    bool freez;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -47,12 +50,23 @@ public class Bird : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(transform.position.x > limits.x && transform.position.x < limits.y) Hunt();
+        float distanceToTarget = Mathf.Abs(transform.position.x - target.position.x);
+        bool isInsideLimits = transform.position.x > limits.x && transform.position.x < limits.y;
+
+        if (distanceToTarget <= range && isInsideLimits)
+        {
+            freez = false;
+        }
+        else
+        {
+            freez = true;
+        }
+        if(freez) Hunt();
     }
     private void FixedUpdate()
     {
 
-        if (transform.position.x > limits.x && transform.position.x < limits.y) forces();
+        if (transform.position.x > limits.x && transform.position.x < limits.y && !freez) forces();
     }
     private void forces()
     {

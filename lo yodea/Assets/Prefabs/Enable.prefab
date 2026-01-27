@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5802706213981473719}
   - component: {fileID: 6916215479802188050}
   m_Layer: 0
-  m_Name: EnableAreas
+  m_Name: Enable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
