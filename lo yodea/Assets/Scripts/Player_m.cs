@@ -31,6 +31,7 @@ public class Player_M : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         combineMask = groundLayer | floorLayer;
+        transform.position = CheckPoint.spawnPoint;
 
     }
 

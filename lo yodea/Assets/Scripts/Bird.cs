@@ -55,7 +55,6 @@ public class Bird : MonoBehaviour
         float distanceToTarget = Mathf.Abs(pos.x - target.position.x);
         bool isInsideLimits = target.position.x > limits.x &&target.position.x < limits.y;
 
-        print(isInsideLimits);
         if (!isInsideLimits)
         {
             if(pos.x < limits.x)
