@@ -6,6 +6,7 @@ public class Platform : MonoBehaviour
     [SerializeField] private float activeDelay;
     private LineRenderer lineRenderer;
     [SerializeField]Transform point;
+    [SerializeField] LayerMask attackLayer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -25,7 +26,7 @@ public class Platform : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Attack"))
+        if (((1 << collision.gameObject.layer) & attackLayer) != 0)
         {
             Bcollider.enabled = true;
             Invoke("disableCollider", activeDelay);
@@ -33,7 +34,7 @@ public class Platform : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Attack"))
+        if (((1 << collision.gameObject.layer) & attackLayer) != 0)
         {
             Bcollider.enabled = true;
             Invoke("disableCollider", activeDelay);

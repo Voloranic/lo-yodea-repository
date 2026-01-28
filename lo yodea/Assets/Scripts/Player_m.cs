@@ -26,6 +26,7 @@ public class Player_M : MonoBehaviour
     [SerializeField] float dashForce;
 
     int face;
+    private int health = 100;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -37,6 +38,11 @@ public class Player_M : MonoBehaviour
     {
         checkIfScared();
         addForce();
+        if(health <= 0)
+        {
+            Die();
+        }
+
     }
 
     void Update()
@@ -50,16 +56,20 @@ public class Player_M : MonoBehaviour
         checkGround();
 
     }
-    private void Jump()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-
+        if (collision.CompareTag("BirdBoom"))
+        {
+            health -= 34;
+        }
     }
+   
     private void attacks()
     {
         //dash
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            rb.AddForce(new Vector2(dashForce * face, 0), ForceMode2D.Impulse);
+          //  rb.AddForce(new Vector2(dashForce * face, 0), ForceMode2D.Impulse);
             print("dash!");
         }
     }
@@ -164,4 +174,5 @@ public class Player_M : MonoBehaviour
         dead = true;
         GameCanvas.instance.EnableDeathScreen();
     }
+   
 }

@@ -1127,6 +1127,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: player
       objectReference: {fileID: 0}
+    - target: {fileID: 1031776502177775075, guid: bdb6b44aec13e3441b1656632c9927b6, type: 3}
+      propertyPath: deathScreen
+      value: 
+      objectReference: {fileID: 730049988}
+    - target: {fileID: 1031776502177775075, guid: bdb6b44aec13e3441b1656632c9927b6, type: 3}
+      propertyPath: scaredMultiplyer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1746200728123080175, guid: bdb6b44aec13e3441b1656632c9927b6, type: 3}
       propertyPath: m_LocalPosition.x
       value: -39.54
@@ -1363,9 +1371,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2695909118633038607, guid: df70dd1ee84f7ab47bba14bd3cf0adbe, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2695909118633038607, guid: df70dd1ee84f7ab47bba14bd3cf0adbe, type: 3}
+      propertyPath: m_TagString
+      value: BirdBoom
+      objectReference: {fileID: 0}
     - target: {fileID: 5001017595090631193, guid: df70dd1ee84f7ab47bba14bd3cf0adbe, type: 3}
       propertyPath: m_Name
       value: Bird
+      objectReference: {fileID: 0}
+    - target: {fileID: 5001017595090631193, guid: df70dd1ee84f7ab47bba14bd3cf0adbe, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6538165865867162218, guid: df70dd1ee84f7ab47bba14bd3cf0adbe, type: 3}
       propertyPath: m_LocalPosition.x
