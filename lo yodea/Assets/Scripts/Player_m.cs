@@ -27,6 +27,7 @@ public class Player_M : MonoBehaviour
 
     int face;
     private int health = 100;
+    bool dash;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -72,6 +73,7 @@ public class Player_M : MonoBehaviour
         {
           //  rb.AddForce(new Vector2(dashForce * face, 0), ForceMode2D.Impulse);
             print("dash!");
+            dash = true;
         }
     }
     private void direction()
@@ -145,6 +147,11 @@ public class Player_M : MonoBehaviour
          
             }
             rb.linearVelocityX = Mathf.Clamp(rb.linearVelocityX, -maxSpeed, maxSpeed);
+            if (dash)
+            {
+                rb.AddForce(new Vector2(dashForce * face, 0), ForceMode2D.Impulse);
+                dash = false;
+            }
         }
     }
 

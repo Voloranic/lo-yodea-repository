@@ -46,9 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03435fb94cb6ef8499b47d8df339735f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CheckPoint
-  spawnPoint: {x: 0, y: 0}
   index: 1
-  collider: {fileID: 3017495166897254588}
+  col: {fileID: 3017495166897254588}
 --- !u!61 &3017495166897254588
 BoxCollider2D:
   m_ObjectHideFlags: 0
