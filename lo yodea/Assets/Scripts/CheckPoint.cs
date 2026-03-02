@@ -3,7 +3,7 @@ using UnityEngine;
 public class CheckPoint : MonoBehaviour
 {
     public static Vector2 spawnPoint;
-    public static int spawnIndex;
+    public static int spawnIndex = 1;
     [SerializeField] int index;
     [SerializeField] BoxCollider2D collider;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -11,11 +11,19 @@ public class CheckPoint : MonoBehaviour
     {
         if(spawnIndex == index)
         {
-            spawnPoint = transform.position;
-            collider.enabled = false;
+           // spawnPoint = transform.position;
+          //  collider.enabled = false;
         }
         else if(spawnIndex > index)
         {
+            collider.enabled = false;
+        }
+    }
+    private void Awake()
+    {
+        if (spawnIndex == index)
+        {
+            spawnPoint = transform.position;
             collider.enabled = false;
         }
     }
