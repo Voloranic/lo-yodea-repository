@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CheckPoint
   index: 1
-  col: {fileID: 3017495166897254588}
+  collider: {fileID: 3017495166897254588}
 --- !u!61 &3017495166897254588
 BoxCollider2D:
   m_ObjectHideFlags: 0
